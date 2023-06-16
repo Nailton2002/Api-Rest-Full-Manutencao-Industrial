@@ -1,6 +1,9 @@
 package com.manutencao.industrial.application.os.resource;
 
-import com.manutencao.industrial.application.os.dto.view.OSDTO;
+import com.manutencao.industrial.application.os.dto.form.OsForm;
+import com.manutencao.industrial.application.os.dto.form.OsUpForm;
+import com.manutencao.industrial.application.os.dto.view.OsListView;
+import com.manutencao.industrial.application.os.dto.view.OsView;
 import com.manutencao.industrial.domain.os.service.OsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +23,27 @@ public class OsResource {
 	private OsService service;
 
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<OSDTO> findById(@PathVariable Integer id) {
-		OSDTO obj = new OSDTO(service.findById(id));
+	public ResponseEntity<OsView> findById(@PathVariable Integer id) {
+		OsView obj = new OsView(service.findById(id));
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<OSDTO>> findAll() {
-		List<OSDTO> list = service.findAll().stream().map(obj -> new OSDTO(obj)).collect(Collectors.toList());
+	public ResponseEntity<List<OsListView>> findAll() {
+		List<OsListView> list = service.findAll().stream().map(obj -> new OsListView(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(list);
 	}
 
 	@PostMapping
-	public ResponseEntity<OSDTO> create(@Valid @RequestBody OSDTO obj) {
-		obj = new OSDTO(service.create(obj));
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+	public ResponseEntity<OsForm> create(@Valid @RequestBody OsForm form) {
+		form = new OsForm(service.create(form));
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(form.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 
-	@PutMapping
-	public ResponseEntity<OSDTO> update(@Valid @RequestBody OSDTO obj) {
-		obj = new OSDTO(service.update(obj));
-		return ResponseEntity.ok().body(obj);
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<OsUpForm> update(@Valid @RequestBody OsUpForm upForm) {
+		var newUpForm = new OsUpForm(service.update(upForm));
+		return ResponseEntity.ok().body(upForm);
 	}
 }

@@ -1,6 +1,8 @@
 package com.manutencao.industrial.domain.os.service;
 
-import com.manutencao.industrial.application.os.dto.view.OSDTO;
+import com.manutencao.industrial.application.os.dto.form.OsForm;
+import com.manutencao.industrial.application.os.dto.form.OsUpForm;
+import com.manutencao.industrial.application.os.dto.view.OsView;
 import com.manutencao.industrial.domain.enums.Prioridade;
 import com.manutencao.industrial.domain.enums.Status;
 import com.manutencao.industrial.domain.operador.model.Operador;
@@ -33,39 +35,53 @@ public class OsService {
     public OrdemServico findById(Integer id) {
         Optional<OrdemServico> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
+        "Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
     }
 
     public List<OrdemServico> findAll() {
         return repository.findAll();
     }
 
-    public OrdemServico create(@Valid OSDTO obj) {
-        return fromDTO(obj);
+    public OrdemServico create(@Valid OsForm form) {
+        return fromOsForm(form);
     }
 
-    public OrdemServico update(@Valid OSDTO obj) {
-        findById(obj.getId());
-        return fromDTO(obj);
+    public OrdemServico update(@Valid OsUpForm upForm) {
+        findById(upForm.getId());
+        return fromOsUpForm(upForm);
     }
 
-    private OrdemServico fromDTO(OSDTO obj) {
-        OrdemServico newObj = new OrdemServico();
-        newObj.setId(obj.getId());
-        newObj.setObservacoes(obj.getObservacoes());
-        newObj.setPrioridade(Prioridade.toEnum(obj.getPrioridade().getCod()));
-        newObj.setStatus(Status.toEnum(obj.getStatus().getCod()));
+    private OrdemServico fromOsForm(OsForm form) {
+        OrdemServico obj = new OrdemServico();
+        obj.setId(form.getId());
+        obj.setObservacoes(form.getObservacoes());
+        obj.setPrioridade(Prioridade.toEnum(form.getPrioridade().getCod()));
+        obj.setStatus(Status.toEnum(form.getStatus().getCod()));
 
-        Tecnico tec = tecnicoService.findById(obj.getTecnico());
-        Operador ope = operadorService.findById(obj.getOperador());
+        Tecnico tec = tecnicoService.findById(form.getTecnico());
+        Operador ope = operadorService.findById(form.getOperador());
 
-        newObj.setTecnico(tec);
-        newObj.setOperador(ope);
+        obj.setTecnico(tec);
+        obj.setOperador(ope);
 
-        if(newObj.getStatus().getCod().equals(2)) {
-            newObj.setDataFechamento(LocalDateTime.now());
+        if(obj.getStatus().getCod().equals(2)) {
+            obj.setDataFechamento(LocalDateTime.now());
         }
+        return repository.save(obj);
+    }
 
-        return repository.save(newObj);
+    private OrdemServico fromOsUpForm(OsUpForm form) {
+
+        OrdemServico obj = new OrdemServico();
+        obj.setId(form.getId());
+        obj.setObservacoes(form.getObservacoes());
+        obj.setPrioridade(Prioridade.toEnum(form.getPrioridade().getCod()));
+        obj.setStatus(Status.toEnum(form.getStatus().getCod()));
+
+        Tecnico tec = tecnicoService.findById(form.getTecnico());
+
+        obj.setTecnico(tec);
+
+        return repository.save(obj);
     }
 }

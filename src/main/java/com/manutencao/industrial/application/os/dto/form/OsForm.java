@@ -1,15 +1,14 @@
-package com.manutencao.industrial.application.os.dto.view;
+package com.manutencao.industrial.application.os.dto.form;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.manutencao.industrial.domain.enums.Prioridade;
 import com.manutencao.industrial.domain.enums.Status;
 import com.manutencao.industrial.domain.os.entity.OrdemServico;
-import org.apache.tomcat.jni.OS;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
-public class OSDTO {
+public class OsForm {
 
     private Integer id;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -23,9 +22,9 @@ public class OSDTO {
     private Integer tecnico;
     private Integer operador;
 
-    public OSDTO() { }
+    public OsForm() { }
 
-    public OSDTO(OrdemServico obj) {
+    public OsForm(OrdemServico obj) {
         this.id = obj.getId();
         this.dataAbertura = obj.getDataAbertura();
         this.dataFechamento = obj.getDataFechamento();
