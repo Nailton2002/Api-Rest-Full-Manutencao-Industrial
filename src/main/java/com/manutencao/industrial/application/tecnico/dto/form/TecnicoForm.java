@@ -1,15 +1,14 @@
-package com.manutencao.industrial.application.tecnico.dto.view;
+package com.manutencao.industrial.application.tecnico.dto.form;
 
 import com.manutencao.industrial.domain.tecnico.model.Tecnico;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class TecnicoDTO {
+public class TecnicoForm {
 
     private Integer id;
     @NotEmpty(message = "O campo NOME é requerido")
@@ -19,12 +18,11 @@ public class TecnicoDTO {
     @NotEmpty(message = "O campo TELEFONE é requerido")
     private String telefone;
 
-    public TecnicoDTO() {
+    public TecnicoForm() {
         super();
     }
 
-    public TecnicoDTO(Tecnico obj) {
-        super();
+    public TecnicoForm(Tecnico obj) {
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.cpf = obj.getCpf();
