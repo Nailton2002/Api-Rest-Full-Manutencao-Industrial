@@ -38,14 +38,14 @@ public class TecnicoService {
         if (findByCPF(form) != null) {
             throw new DataIntegratyViolationException("CPF já cadastrado na base de dados!");
         }
-        Tecnico newTec = new Tecnico(null, form.getNome(), form.getCpf(), form.getTelefone());
-        return repository.save(newTec);
+        var obj = new Tecnico(form);
+        return repository.save(new Tecnico(form));
     }
+
 
     public Tecnico update(Integer id, @Valid TecnicoUpForm upForm) {
         var obj = findById(id);
-        obj.setNome(upForm.getNome());
-        obj.setTelefone(upForm.getTelefone());
+        obj.atualizarTecnico(upForm);
         return repository.save(obj);
     }
 

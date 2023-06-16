@@ -8,6 +8,7 @@ import com.manutencao.industrial.domain.tecnico.model.Tecnico;
 import com.manutencao.industrial.domain.tecnico.service.TecnicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,7 +40,7 @@ public class TecnicoResource {
     @PostMapping
     public ResponseEntity<TecnicoForm> create(@Valid @RequestBody TecnicoForm form) {
         var obj = service.create(form);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/tecnicos/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
