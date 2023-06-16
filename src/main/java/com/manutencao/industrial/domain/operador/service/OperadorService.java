@@ -42,7 +42,6 @@ public class OperadorService {
     public Operador update(Integer id, @Valid OperadorUpForm upForm) {
         Operador obj = findById(id);
         obj.setNome(upForm.getNome());
-        obj.setCpf(upForm.getCpf());
         obj.setTelefone(upForm.getTelefone());
         return repository.save(obj);
     }
