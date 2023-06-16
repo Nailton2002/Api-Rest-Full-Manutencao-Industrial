@@ -2,7 +2,7 @@ package com.manutencao.industrial.domain.tecnico.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.manutencao.industrial.domain.funcionario.entity.Funcionario;
-import org.apache.tomcat.jni.OS;
+import com.manutencao.industrial.domain.os.entity.OrdemServico;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Tecnico extends Funcionario {
     @JsonIgnore
     @OneToMany(mappedBy = "tecnico")
-    private List<OS> list = new ArrayList<>();
+    private List<OrdemServico> list = new ArrayList<>();
 
     public Tecnico() {
         super();
@@ -23,11 +23,11 @@ public class Tecnico extends Funcionario {
         super(id, nome, cpf, telefone, senha);
     }
 
-    public List<OS> getList() {
+    public List<OrdemServico> getList() {
         return list;
     }
 
-    public void setList(List<OS> list) {
+    public void setList(List<OrdemServico> list) {
         this.list = list;
     }
 }
