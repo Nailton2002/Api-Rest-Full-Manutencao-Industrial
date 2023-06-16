@@ -1,6 +1,7 @@
 package com.manutencao.industrial.domain.operador.service;
 
-import com.manutencao.industrial.application.operador.dto.view.OperadorDTO;
+import com.manutencao.industrial.application.operador.dto.form.OperadorForm;
+import com.manutencao.industrial.application.operador.dto.form.OperadorUpForm;
 import com.manutencao.industrial.domain.funcionario.entity.Funcionario;
 import com.manutencao.industrial.domain.funcionario.repository.FuncionarioRepository;
 import com.manutencao.industrial.domain.operador.model.Operador;
@@ -24,46 +25,38 @@ public class OperadorService {
     public Operador findById(Integer id) {
         Optional<Operador> obj = repository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
-                "Objeto não encontrado! Id: " + id + ", Tipo: " + Operador.class.getName()));
+        "Objeto não encontrado! Id: " + id + ", Tipo: " + Operador.class.getName()));
     }
 
     public List<Operador> findAll() {
         return repository.findAll();
     }
 
-    public Operador create(OperadorDTO objDTO) {
-        if (findByCPF(objDTO) != null) {
+    public Operador create(OperadorForm form) {
+        if (findByCPF(form) != null) {
             throw new DataIntegratyViolationException("CPF já cadastrado na base de dados!");
         }
-        return repository.save(new Operador(null, objDTO.getNome(), objDTO.getCpf(), objDTO.getTelefone()));
+        return repository.save(new Operador(null, form.getNome(), form.getCpf(), form.getTelefone()));
     }
 
-    public Operador update(Integer id, @Valid OperadorDTO objDTO) {
-        Operador oldObj = findById(id);
-
-        if (findByCPF(objDTO) != null && findByCPF(objDTO).getId() != id) {
-            throw new DataIntegratyViolationException("CPF já cadastrado na base de dados!");
-        }
-
-        oldObj.setNome(objDTO.getNome());
-        oldObj.setCpf(objDTO.getCpf());
-        oldObj.setTelefone(objDTO.getTelefone());
-        return repository.save(oldObj);
+    public Operador update(Integer id, @Valid OperadorUpForm upForm) {
+        Operador obj = findById(id);
+        obj.setNome(upForm.getNome());
+        obj.setCpf(upForm.getCpf());
+        obj.setTelefone(upForm.getTelefone());
+        return repository.save(obj);
     }
 
     public void delete(Integer id) {
         Operador obj = findById(id);
-
         if (obj.getList().size() > 0) {
-            throw new DataIntegratyViolationException("Pessoa possui Ordens de Serviço, não pode ser deletado!");
+            throw new DataIntegratyViolationException("Funcionario possui OS, não pode ser deletado!");
         }
-
         repository.deleteById(id);
     }
 
-    private Funcionario findByCPF(OperadorDTO objDTO) {
-        Funcionario obj = funcionarioRepository.findByCPF(objDTO.getCpf());
-
+    private Funcionario findByCPF(OperadorForm form) {
+        Funcionario obj = funcionarioRepository.findByCPF(form.getCpf());
         if (obj != null) {
             return obj;
         }

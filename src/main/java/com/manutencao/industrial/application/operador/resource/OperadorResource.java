@@ -1,6 +1,9 @@
 package com.manutencao.industrial.application.operador.resource;
 
-import com.manutencao.industrial.application.operador.dto.view.OperadorDTO;
+import com.manutencao.industrial.application.operador.dto.form.OperadorForm;
+import com.manutencao.industrial.application.operador.dto.form.OperadorUpForm;
+import com.manutencao.industrial.application.operador.dto.view.OperadorListView;
+import com.manutencao.industrial.application.operador.dto.view.OperadorView;
 import com.manutencao.industrial.domain.operador.service.OperadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,29 +23,29 @@ public class OperadorResource {
     private OperadorService service;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OperadorDTO> findById(@PathVariable Integer id) {
-        OperadorDTO objDTO = new OperadorDTO(service.findById(id));
-        return ResponseEntity.ok().body(objDTO);
+    public ResponseEntity<OperadorView> findById(@PathVariable Integer id) {
+        OperadorView view = new OperadorView(service.findById(id));
+        return ResponseEntity.ok().body(view);
     }
 
     @GetMapping
-    public ResponseEntity<List<OperadorDTO>> findAll() {
-        List<OperadorDTO> listDTO = service.findAll().stream().map(obj -> new OperadorDTO(obj))
+    public ResponseEntity<List<OperadorListView>> findAll() {
+        List<OperadorListView> listViews = service.findAll().stream().map(o -> new OperadorListView(o))
         .collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDTO);
+        return ResponseEntity.ok().body(listViews);
     }
 
     @PostMapping
-    public ResponseEntity<OperadorDTO> create(@Valid @RequestBody OperadorDTO objDTO) {
-        var newObj = service.create(objDTO);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
+    public ResponseEntity<OperadorForm> create(@Valid @RequestBody OperadorForm form) {
+        var obj = service.create(form);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<OperadorDTO> update(@PathVariable Integer id, @Valid @RequestBody OperadorDTO objDTO) {
-        OperadorDTO newObj = new OperadorDTO(service.update(id, objDTO));
-        return ResponseEntity.ok().body(newObj);
+    public ResponseEntity<OperadorUpForm> update(@PathVariable Integer id, @Valid @RequestBody OperadorUpForm upForm) {
+        OperadorUpForm newUpForm = new OperadorUpForm(service.update(id, upForm));
+        return ResponseEntity.ok().body(newUpForm);
     }
 
     @DeleteMapping(value = "/{id}")

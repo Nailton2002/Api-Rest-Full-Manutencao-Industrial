@@ -1,19 +1,14 @@
-package com.manutencao.industrial.application.operador.dto.view;
+package com.manutencao.industrial.application.operador.dto.form;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.manutencao.industrial.domain.operador.model.Operador;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
-public class OperadorDTO {
+public class OperadorUpForm {
 
     private Integer id;
     @NotEmpty(message = "O campo NOME é requerido")
@@ -23,9 +18,9 @@ public class OperadorDTO {
     @NotEmpty(message = "O campo TELEFONE é requerido")
     private String telefone;
 
-    public OperadorDTO() { }
+    public OperadorUpForm() { }
 
-    public OperadorDTO(Operador obj) {
+    public OperadorUpForm(Operador obj) {
         super();
         this.id = obj.getId();
         this.nome = obj.getNome();
