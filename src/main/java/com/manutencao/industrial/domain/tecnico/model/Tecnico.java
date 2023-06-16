@@ -19,8 +19,8 @@ public class Tecnico extends Funcionario {
         super();
     }
 
-    public Tecnico(Integer id, String nome, String cpf, String telefone, String senha) {
-        super(id, nome, cpf, telefone, senha);
+    public Tecnico(Integer id, String nome, String cpf, String telefone) {
+        super(id, nome, cpf, telefone);
     }
 
     public List<OrdemServico> getList() {

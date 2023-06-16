@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter @Setter
-@AllArgsConstructor
 @Entity
 public class Funcionario{
 
@@ -26,8 +25,7 @@ public class Funcionario{
     public Funcionario() {
     }
 
-    public Funcionario(Integer id, String nome, String cpf, String telefone, String senha) {
-        super();
+    public Funcionario(Integer id, String nome, String cpf, String telefone) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
