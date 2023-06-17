@@ -32,6 +32,9 @@ public class TecnicoService {
         if (findByCPF(form) != null) {
             throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
         }
+        if (repository.existsByTelefone(form.getTelefone())){
+            throw new ObjectNotFoundExceptionService("Telefone existe na base de dados!");
+        }
         var obj = new Tecnico(form);
         return repository.save(new Tecnico(form));
     }
@@ -41,19 +44,15 @@ public class TecnicoService {
         return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id ));
 
     }
-    public TecnicoView buscarPorId(Integer id) {
-        var obj = repository.findById(id).orElseThrow(()-> new ObjectNotFoundExceptionService("id não existe"));
-        return new TecnicoView(obj);
-    }
 
     public List<Tecnico> findAll() {
         return repository.findAll();
     }
 
-    public List<TecnicoListView> buscarTodos(){
-        List<Tecnico> list = repository.findAll();
-        List<TecnicoListView> dados = list.stream().map(b -> new TecnicoListView(b)).collect(Collectors.toList());
-        return dados;
+    public List<TecnicoView> findByNome(String nome){
+        List<Tecnico> list = repository.findByNome(nome);
+        List<TecnicoView> listViews = list.stream().map(b -> new TecnicoView(b)).collect(Collectors.toList());
+        return listViews;
     }
 
     public Tecnico update(Integer id, @Valid TecnicoUpForm upForm) {

@@ -38,13 +38,17 @@ public class TecnicoResource {
         return ResponseEntity.ok().body(listViews);
     }
 
+    @GetMapping("/porNomes")
+    public ResponseEntity<List<TecnicoView>> findByNome(@RequestParam(name = "nome") String nome){
+        List<TecnicoView> listView = service.findByNome(nome);
+        return ResponseEntity.ok().body(listView);
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<TecnicoView> findById(@PathVariable Integer id) {
         TecnicoView view = new TecnicoView(service.findById(id));
         return ResponseEntity.ok().body(view);
     }
-
-
 
     @Transactional
     @PutMapping(value = "/{id}")

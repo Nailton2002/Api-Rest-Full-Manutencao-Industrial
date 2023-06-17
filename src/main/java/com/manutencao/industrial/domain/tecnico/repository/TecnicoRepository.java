@@ -5,7 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TecnicoRepository extends JpaRepository<Tecnico, Integer> {
     @Query("SELECT t FROM Tecnico t WHERE t.cpf =:cpf")
     Tecnico findByCPF(@Param("cpf") String cpf);
+
+    @Query("SELECT t FROM Tecnico t WHERE LOWER(t.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
+    List<Tecnico> findByNome(String nome);
+
+    boolean existsByTelefone(String fone);
 }
