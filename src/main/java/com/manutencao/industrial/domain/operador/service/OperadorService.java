@@ -6,8 +6,8 @@ import com.manutencao.industrial.domain.funcionario.entity.Funcionario;
 import com.manutencao.industrial.domain.funcionario.repository.FuncionarioRepository;
 import com.manutencao.industrial.domain.operador.model.Operador;
 import com.manutencao.industrial.domain.operador.repository.OperadorRepository;
-import com.manutencao.industrial.infra.exception.DataIntegratyViolationException;
-import com.manutencao.industrial.infra.exception.ObjectNotFoundException;
+import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundException;
+import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class OperadorService {
 
     public Operador findById(Integer id) {
         Optional<Operador> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException(
+        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService(
         "Objeto não encontrado! Id: " + id + ", Tipo: " + Operador.class.getName()));
     }
 
@@ -34,7 +34,7 @@ public class OperadorService {
 
     public Operador create(OperadorForm form) {
         if (findByCPF(form) != null) {
-            throw new DataIntegratyViolationException("CPF já cadastrado na base de dados!");
+            throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
         }
         return repository.save(new Operador(null, form.getNome(), form.getCpf(), form.getTelefone()));
     }
@@ -49,7 +49,7 @@ public class OperadorService {
     public void delete(Integer id) {
         Operador obj = findById(id);
         if (obj.getList().size() > 0) {
-            throw new DataIntegratyViolationException("Funcionario possui OS, não pode ser deletado!");
+            throw new ObjectNotFoundExceptionService("Funcionario possui OS, não pode ser deletado!");
         }
         repository.deleteById(id);
     }

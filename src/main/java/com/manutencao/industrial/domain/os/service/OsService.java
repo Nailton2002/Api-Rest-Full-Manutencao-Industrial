@@ -2,7 +2,6 @@ package com.manutencao.industrial.domain.os.service;
 
 import com.manutencao.industrial.application.os.dto.form.OsForm;
 import com.manutencao.industrial.application.os.dto.form.OsUpForm;
-import com.manutencao.industrial.application.os.dto.view.OsView;
 import com.manutencao.industrial.domain.enums.Prioridade;
 import com.manutencao.industrial.domain.enums.Status;
 import com.manutencao.industrial.domain.operador.model.Operador;
@@ -11,7 +10,8 @@ import com.manutencao.industrial.domain.os.entity.OrdemServico;
 import com.manutencao.industrial.domain.os.repository.OsRepository;
 import com.manutencao.industrial.domain.tecnico.model.Tecnico;
 import com.manutencao.industrial.domain.tecnico.service.TecnicoService;
-import com.manutencao.industrial.infra.exception.ObjectNotFoundException;
+import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundException;
+import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +34,7 @@ public class OsService {
 
     public OrdemServico findById(Integer id) {
         Optional<OrdemServico> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundException(
-        "Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
+        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
     }
 
     public List<OrdemServico> findAll() {

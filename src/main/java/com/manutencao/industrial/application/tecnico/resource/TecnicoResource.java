@@ -24,19 +24,7 @@ public class TecnicoResource {
     @Autowired
     private TecnicoService service;
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<TecnicoView> findById(@PathVariable Integer id) {
-        TecnicoView view = new TecnicoView(service.findById(id));
-        return ResponseEntity.ok().body(view);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<TecnicoListView>> findAll() {
-        List<TecnicoListView> listViews = service.findAll().stream().map(obj -> new TecnicoListView(obj))
-        .collect(Collectors.toList());
-        return ResponseEntity.ok().body(listViews);
-    }
-
+    @Transactional
     @PostMapping
     public ResponseEntity<TecnicoForm> create(@Valid @RequestBody TecnicoForm form) {
         var obj = service.create(form);
@@ -44,12 +32,28 @@ public class TecnicoResource {
         return ResponseEntity.created(uri).build();
     }
 
+    @GetMapping
+    public ResponseEntity<List<TecnicoListView>> findAll() {
+        List<TecnicoListView> listViews = service.findAll().stream().map(obj -> new TecnicoListView(obj)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listViews);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<TecnicoView> findById(@PathVariable Integer id) {
+        TecnicoView view = new TecnicoView(service.findById(id));
+        return ResponseEntity.ok().body(view);
+    }
+
+
+
+    @Transactional
     @PutMapping(value = "/{id}")
     public ResponseEntity<TecnicoUpForm> update(@PathVariable Integer id, @Valid @RequestBody TecnicoUpForm upForm) {
         TecnicoUpForm newUpForm = new TecnicoUpForm(service.update(id, upForm));
         return ResponseEntity.ok().body(newUpForm);
     }
 
+    @Transactional
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);

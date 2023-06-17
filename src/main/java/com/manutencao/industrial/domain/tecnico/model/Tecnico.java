@@ -17,8 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Tecnico extends Funcionario {
-    @JsonIgnore
-    @OneToMany(mappedBy = "tecnico")
+    @JsonIgnore @OneToMany(mappedBy = "tecnico")
     private List<OrdemServico> list = new ArrayList<>();
 
     public Tecnico(TecnicoForm form){
@@ -37,9 +36,7 @@ public class Tecnico extends Funcionario {
         }
     }
 
-    public Tecnico() {
-        super();
-    }
+    public Tecnico() { }
 
     public Tecnico(Integer id, String nome, String cpf, String telefone) {
         super(id, nome, cpf, telefone);
