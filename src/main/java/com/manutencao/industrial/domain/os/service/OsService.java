@@ -32,15 +32,6 @@ public class OsService {
     @Autowired
     private OperadorService operadorService;
 
-    public OrdemServico findById(Integer id) {
-        Optional<OrdemServico> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
-    }
-
-    public List<OrdemServico> findAll() {
-        return repository.findAll();
-    }
-
     public OrdemServico create(@Valid OsForm form) {
         return fromOsForm(form);
     }
@@ -48,6 +39,20 @@ public class OsService {
     public OrdemServico update(@Valid OsUpForm upForm) {
         findById(upForm.getId());
         return fromOsUpForm(upForm);
+    }
+
+    public void delete(Integer id) {
+        var obj = findById(id);
+        repository.deleteById(id);
+    }
+
+    public OrdemServico findById(Integer id) {
+        Optional<OrdemServico> obj = repository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id + ", Tipo: " + OrdemServico.class.getName()));
+    }
+
+    public List<OrdemServico> findAll() {
+        return repository.findAll();
     }
 
     private OrdemServico fromOsForm(OsForm form) {
@@ -83,4 +88,6 @@ public class OsService {
 
         return repository.save(obj);
     }
+
+
 }
