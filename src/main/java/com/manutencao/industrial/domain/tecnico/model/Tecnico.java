@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 @Entity
 public class Tecnico extends Funcionario {
+
     @JsonIgnore @OneToMany(mappedBy = "tecnico")
     private List<OrdemServico> list = new ArrayList<>();
 

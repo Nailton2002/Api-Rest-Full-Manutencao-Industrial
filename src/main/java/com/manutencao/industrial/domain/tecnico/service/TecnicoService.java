@@ -12,12 +12,15 @@ import com.manutencao.industrial.domain.tecnico.repository.TecnicoRepository;
 import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundException;
 import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 @Service
 public class TecnicoService {
@@ -29,7 +32,7 @@ public class TecnicoService {
     private FuncionarioRepository funcionarioRepository;
 
     public Tecnico create(TecnicoForm form) {
-        if (findByCPF(form) != null) {
+        if (repository.existsByCpf(form.getCpf())) {
             throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
         }
         if (repository.existsByTelefone(form.getTelefone())){
@@ -37,12 +40,6 @@ public class TecnicoService {
         }
         var obj = new Tecnico(form);
         return repository.save(new Tecnico(form));
-    }
-
-    public Tecnico findById(Integer id) {
-        Optional<Tecnico> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id ));
-
     }
 
     public List<Tecnico> findAll() {
@@ -55,6 +52,16 @@ public class TecnicoService {
         return listViews;
     }
 
+    public Page<Tecnico> findByPage(Pageable paginacao) {
+        return repository.findAll(paginacao);
+    }
+
+    public Tecnico findById(Integer id) {
+        Optional<Tecnico> obj = repository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id ));
+
+    }
+
     public Tecnico update(Integer id, @Valid TecnicoUpForm upForm) {
         var obj = findById(id);
         obj.atualizarTecnico(upForm);
@@ -64,7 +71,7 @@ public class TecnicoService {
     public void delete(Integer id) {
         var obj = findById(id);
         if (obj.getList().size() > 0) {
-            throw new ObjectNotFoundExceptionService("Técnico possui Ordens de Serviço, não pode ser deletado!");
+            throw new ObjectNotFoundExceptionService("Técnico possui Orden de Serviço, não pode ser deletado!");
         }
         repository.deleteById(id);
     }
@@ -76,4 +83,6 @@ public class TecnicoService {
         }
         return null;
     }
+
+
 }
