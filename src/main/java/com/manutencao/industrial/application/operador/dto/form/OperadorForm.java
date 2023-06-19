@@ -21,7 +21,6 @@ public class OperadorForm {
     public OperadorForm() { }
 
     public OperadorForm(Operador obj) {
-        super();
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.cpf = obj.getCpf();

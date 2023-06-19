@@ -2,6 +2,7 @@ package com.manutencao.industrial.domain.operador.service;
 
 import com.manutencao.industrial.application.operador.dto.form.OperadorForm;
 import com.manutencao.industrial.application.operador.dto.form.OperadorUpForm;
+import com.manutencao.industrial.application.operador.dto.view.OperadorListView;
 import com.manutencao.industrial.domain.funcionario.entity.Funcionario;
 import com.manutencao.industrial.domain.funcionario.repository.FuncionarioRepository;
 import com.manutencao.industrial.domain.operador.model.Operador;
@@ -9,11 +10,13 @@ import com.manutencao.industrial.domain.operador.repository.OperadorRepository;
 import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundException;
 import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundExceptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OperadorService {
@@ -22,27 +25,35 @@ public class OperadorService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
-    public Operador findById(Integer id) {
-        Optional<Operador> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService(
-        "Objeto não encontrado! Id: " + id + ", Tipo: " + Operador.class.getName()));
-    }
-
-    public List<Operador> findAll() {
-        return repository.findAll();
-    }
-
     public Operador create(OperadorForm form) {
-        if (findByCPF(form) != null) {
+        if (repository.existsByCpf(form.getCpf())) {
             throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
         }
-        return repository.save(new Operador(null, form.getNome(), form.getCpf(), form.getTelefone()));
+        if (repository.existsByTelefone(form.getTelefone())){
+            throw new ObjectNotFoundExceptionService("Telefone existe na base de dados!");
+        }
+        var obj = new Operador(form);
+        return repository.save(new Operador(form));
+    }
+
+    public List<OperadorListView> findAll() {
+        List<Operador> listObj = repository.findAll();
+        List<OperadorListView> listViews = listObj.stream().map(o -> new OperadorListView(o)).collect(Collectors.toList());
+        if (listViews == null){
+            throw new ObjectNotFoundException("Não existe Operador cadastrado!");
+        }
+        return listViews;
+    }
+
+    public Operador findById(Integer id) {
+        var obj = repository.findById(id).orElseThrow(()-> new ObjectNotFoundExceptionService(
+       "Este id = " + id + ", não existe no banco de dados!"));
+        return obj;
     }
 
     public Operador update(Integer id, @Valid OperadorUpForm upForm) {
-        Operador obj = findById(id);
-        obj.setNome(upForm.getNome());
-        obj.setTelefone(upForm.getTelefone());
+        var obj = findById(id);
+        obj.atualizarOperador(upForm);
         return repository.save(obj);
     }
 
