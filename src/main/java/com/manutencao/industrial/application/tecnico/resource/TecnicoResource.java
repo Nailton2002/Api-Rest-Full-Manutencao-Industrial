@@ -29,7 +29,7 @@ public class TecnicoResource {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<TecnicoForm> create(@Valid @RequestBody TecnicoForm form) {
+    public ResponseEntity<TecnicoListView> create(@Valid @RequestBody TecnicoForm form) {
         var obj = service.create(form);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/tecnicos/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -37,7 +37,7 @@ public class TecnicoResource {
 
     @GetMapping
     public ResponseEntity<List<TecnicoListView>> findAll() {
-        List<TecnicoListView> listViews = service.findAll().stream().map(obj -> new TecnicoListView(obj)).collect(Collectors.toList());
+        List<TecnicoListView> listViews = service.findAll();
         return ResponseEntity.ok().body(listViews);
     }
 

@@ -42,8 +42,10 @@ public class TecnicoService {
         return repository.save(new Tecnico(form));
     }
 
-    public List<Tecnico> findAll() {
-        return repository.findAll();
+    public List<TecnicoListView> findAll() {
+        List<Tecnico> objList = repository.findAll();
+        List<TecnicoListView> viewList = objList.stream().map(t -> new TecnicoListView(t)).collect(Collectors.toList());
+        return viewList;
     }
 
     public List<TecnicoView> findByNome(String nome){
