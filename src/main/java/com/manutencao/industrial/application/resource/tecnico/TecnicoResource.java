@@ -4,6 +4,7 @@ import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoListView;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
 import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoView;
+import com.manutencao.industrial.domain.service.tecnico.TecnicoService;
 import com.manutencao.industrial.domain.service.tecnico.TecnicoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ import java.util.List;
 public class TecnicoResource {
 
     @Autowired
-    private TecnicoServiceImpl service;
+    private TecnicoService service;
 
     @Transactional
     @PostMapping
