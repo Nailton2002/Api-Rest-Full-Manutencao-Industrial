@@ -1,9 +1,9 @@
 package com.manutencao.industrial.infra.exception;
 
 
-import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundException;
-import com.manutencao.industrial.infra.exception.validation.ObjectNotFoundExceptionService;
-import com.manutencao.industrial.infra.exception.validation.ResourceNotFoundException;
+import com.manutencao.industrial.infra.validation.ObjectNotFoundException;
+import com.manutencao.industrial.infra.validation.ObjectNotFoundExceptionService;
+import com.manutencao.industrial.infra.validation.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
