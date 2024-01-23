@@ -1,27 +1,20 @@
 package com.manutencao.industrial.domain.dto.tecnico.resquest;
 
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TecnicoUpForm {
 
     private Integer id;
-    @NotEmpty(message = "O campo NOME é requerido")
     private String nome;
-    @NotEmpty(message = "O campo TELEFONE é requerido")
     private String telefone;
 
-    public TecnicoUpForm() {
-        super();
-    }
-
     public TecnicoUpForm(Tecnico obj) {
-        super();
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.telefone = obj.getTelefone();

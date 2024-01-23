@@ -4,18 +4,18 @@ import com.manutencao.industrial.domain.dto.operador.resquest.OperadorForm;
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorUpForm;
 import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.entity.os.OrdemServico;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter
-@Setter
-@Entity
+@Data
+@Table(name = "tb_operador")
+@Entity(name = "Operador")
 public class Operador extends Funcionario {
 
     @OneToMany(mappedBy = "operador")
@@ -37,17 +37,17 @@ public class Operador extends Funcionario {
         }
     }
 
-    public Operador() {}
-
-    public Operador(Integer id, String nome, String cpf, String telefone) {
-        super(id, nome, cpf, telefone);
-    }
-
-    public List<OrdemServico> getList() {
-        return list;
-    }
-
-    public void setList(List<OrdemServico> list) {
-        this.list = list;
-    }
+//    public Operador() {}
+//
+//    public Operador(Integer id, String nome, String cpf, String telefone) {
+//        super(id, nome, cpf, telefone);
+//    }
+//
+//    public List<OrdemServico> getList() {
+//        return list;
+//    }
+//
+//    public void setList(List<OrdemServico> list) {
+//        this.list = list;
+//    }
 }

@@ -5,6 +5,7 @@ import com.manutencao.industrial.domain.enums.Prioridade;
 import com.manutencao.industrial.domain.enums.Status;
 import com.manutencao.industrial.domain.entity.operador.Operador;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,9 +13,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@EqualsAndHashCode(of = "id")
-@Getter @Setter
-@Entity
+@Data
+@Entity(name = "OrdemServico")
+@Table(name = "tb_ordem_servico")
 public class OrdemServico {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

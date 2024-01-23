@@ -1,10 +1,7 @@
 package com.manutencao.industrial.domain.service.tecnico;
 
-import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoListView;
-import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoView;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
-import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +13,9 @@ public interface TecnicoService {
 
     Tecnico create(TecnicoForm form);
 
-    List<TecnicoListView> findAll();
+    List<Tecnico> findAll();
 
-    List<TecnicoView> findByNome(String nome);
+    List<Tecnico> findByNome(String nome);
 
     Page<Tecnico> findByPage(Pageable paginacao);
 

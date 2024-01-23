@@ -2,7 +2,6 @@ package com.manutencao.industrial.domain.service.tecnico;
 
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
-import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoListView;
 import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoView;
 import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.repository.funcionario.FuncionarioRepository;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,6 +28,7 @@ public class TecnicoServiceImpl implements TecnicoService{
     @Autowired
     private FuncionarioRepository funcionarioRepository;
 
+    @Transactional
     public Tecnico create(TecnicoForm form) {
         if (repository.existsByCpf(form.getCpf())) {
             throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
@@ -39,16 +40,11 @@ public class TecnicoServiceImpl implements TecnicoService{
         return repository.save(new Tecnico(form));
     }
 
-    public List<TecnicoListView> findAll() {
-        List<Tecnico> objList = repository.findAll();
-        List<TecnicoListView> viewList = objList.stream().map(t -> new TecnicoListView(t)).collect(Collectors.toList());
-        return viewList;
-    }
+    public List<Tecnico> findAll(){ return repository.findAll(); }
 
-    public List<TecnicoView> findByNome(String nome){
+    public List<Tecnico> findByNome(String nome){
         List<Tecnico> list = repository.findByNome(nome);
-        List<TecnicoView> listViews = list.stream().map(b -> new TecnicoView(b)).collect(Collectors.toList());
-        return listViews;
+        return list;
     }
 
     public Page<Tecnico> findByPage(Pageable paginacao) {
@@ -61,12 +57,14 @@ public class TecnicoServiceImpl implements TecnicoService{
 
     }
 
+    @Transactional
     public Tecnico update(Integer id, @Valid TecnicoUpForm upForm) {
         var obj = findById(id);
         obj.atualizarTecnico(upForm);
         return repository.save(obj);
     }
 
+    @Transactional
     public void delete(Integer id) {
         var obj = findById(id);
         if (obj.getList().size() > 0) {

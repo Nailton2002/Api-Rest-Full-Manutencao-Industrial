@@ -5,17 +5,19 @@ import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
 import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.entity.os.OrdemServico;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "Tecnico")
+@Table(name = "tb_recnico")
 public class Tecnico extends Funcionario {
 
     @JsonIgnore @OneToMany(mappedBy = "tecnico")
@@ -37,17 +39,4 @@ public class Tecnico extends Funcionario {
         }
     }
 
-    public Tecnico() { }
-
-    public Tecnico(Integer id, String nome, String cpf, String telefone) {
-        super(id, nome, cpf, telefone);
-    }
-
-    public List<OrdemServico> getList() {
-        return list;
-    }
-
-    public void setList(List<OrdemServico> list) {
-        this.list = list;
-    }
 }

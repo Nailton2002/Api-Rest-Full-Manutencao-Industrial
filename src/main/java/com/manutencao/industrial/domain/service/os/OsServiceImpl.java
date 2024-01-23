@@ -55,7 +55,9 @@ public class OsServiceImpl {
     }
 
     private OrdemServico fromOsForm(OsForm form) {
+
         OrdemServico obj = new OrdemServico();
+
         obj.setId(form.getId());
         obj.setObservacoes(form.getObservacoes());
         obj.setPrioridade(Prioridade.toEnum(form.getPrioridade().getCod()));
@@ -76,6 +78,7 @@ public class OsServiceImpl {
     private OrdemServico fromOsUpForm(OsUpForm form) {
 
         OrdemServico obj = new OrdemServico();
+
         obj.setId(form.getId());
         obj.setObservacoes(form.getObservacoes());
         obj.setPrioridade(Prioridade.toEnum(form.getPrioridade().getCod()));

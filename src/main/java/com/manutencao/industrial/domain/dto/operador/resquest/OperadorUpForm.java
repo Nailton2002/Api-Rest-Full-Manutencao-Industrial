@@ -1,13 +1,11 @@
 package com.manutencao.industrial.domain.dto.operador.resquest;
 
 import com.manutencao.industrial.domain.entity.operador.Operador;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 public class OperadorUpForm {
 
     private Integer id;

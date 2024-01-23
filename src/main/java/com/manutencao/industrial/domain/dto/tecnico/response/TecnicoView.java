@@ -1,29 +1,34 @@
 package com.manutencao.industrial.domain.dto.tecnico.response;
 
+import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TecnicoView {
 
     private Integer id;
-    @NotEmpty(message = "O campo NOME é requerido")
     private String nome;
-    @NotEmpty(message = "O campo CPF é requerido")
     private String cpf;
-    @NotEmpty(message = "O campo TELEFONE é requerido")
     private String telefone;
-
-    public TecnicoView() { }
 
     public TecnicoView(Tecnico obj) {
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.cpf = obj.getCpf();
         this.telefone = obj.getTelefone();
+    }
+
+    public TecnicoView(TecnicoForm request) {
+        this.id = request.getId();
+        this.nome = request.getNome();
+        this.cpf = request.getCpf();
+        this.telefone = request.getTelefone();
     }
 }

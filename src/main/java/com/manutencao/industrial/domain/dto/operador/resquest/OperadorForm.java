@@ -1,13 +1,11 @@
 package com.manutencao.industrial.domain.dto.operador.resquest;
 
 import com.manutencao.industrial.domain.entity.operador.Operador;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
-@Getter
-@Setter
+@Data
 public class OperadorForm {
 
     private Integer id;
@@ -18,7 +16,7 @@ public class OperadorForm {
     @NotEmpty(message = "O campo TELEFONE é requerido")
     private String telefone;
 
-    public OperadorForm() { }
+//    public OperadorForm() { }
 
     public OperadorForm(Operador obj) {
         this.id = obj.getId();

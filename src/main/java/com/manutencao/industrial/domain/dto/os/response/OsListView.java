@@ -1,55 +1,31 @@
 package com.manutencao.industrial.domain.dto.os.response;
 
 import com.manutencao.industrial.domain.entity.os.OrdemServico;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class OsListView {
 
     private Integer id;
-    @NotEmpty(message = "O campo OBSERVAÇÕES é requerido")
-    private String observacoes;
+    private Integer status;
     private Integer tecnico;
     private Integer operador;
-
-    public OsListView() { }
+    private Integer prioridade;
+    private String observacoes;
 
     public OsListView(OrdemServico obj) {
         this.id = obj.getId();
-        this.observacoes = obj.getObservacoes();
+        this.status = obj.getStatus().getCod();
         this.tecnico = obj.getTecnico().getId();
         this.operador = obj.getOperador().getId();
+        this.prioridade = obj.getPrioridade().getCod();
+        this.observacoes = obj.getObservacoes();
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getObservacoes() {
-        return observacoes;
-    }
-
-    public void setObservacoes(String observacoes) {
-        this.observacoes = observacoes;
-    }
-
-    public Integer getTecnico() {
-        return tecnico;
-    }
-
-    public void setTecnico(Integer tecnico) {
-        this.tecnico = tecnico;
-    }
-
-    public Integer getOperador() {
-        return operador;
-    }
-
-    public void setOperador(Integer operador) {
-        this.operador = operador;
-    }
 }
