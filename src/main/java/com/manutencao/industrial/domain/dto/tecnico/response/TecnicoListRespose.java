@@ -1,7 +1,6 @@
 package com.manutencao.industrial.domain.dto.tecnico.response;
 
-import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
-import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
+import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpRequest;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,19 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TecnicoListView {
+public class TecnicoListRespose {
 
     private Integer id;
     private String nome;
     private String telefone;
 
-    public TecnicoListView(Tecnico obj) {
+    public TecnicoListRespose(Tecnico obj) {
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.telefone = obj.getTelefone();
     }
 
-    public TecnicoListView(TecnicoUpForm request) {
+    public TecnicoListRespose(TecnicoUpRequest request) {
         this.id = request.getId();
         this.nome = request.getNome();
         this.telefone = request.getTelefone();

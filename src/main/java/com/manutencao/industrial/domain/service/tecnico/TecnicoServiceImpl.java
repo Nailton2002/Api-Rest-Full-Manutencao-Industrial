@@ -1,8 +1,7 @@
 package com.manutencao.industrial.domain.service.tecnico;
 
-import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoForm;
-import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpForm;
-import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoView;
+import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoRequest;
+import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpRequest;
 import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.repository.funcionario.FuncionarioRepository;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
@@ -17,10 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class TecnicoServiceImpl implements TecnicoService{
+public class TecnicoServiceImpl implements TecnicoService {
 
     @Autowired
     private TecnicoRepository repository;
@@ -29,38 +27,39 @@ public class TecnicoServiceImpl implements TecnicoService{
     private FuncionarioRepository funcionarioRepository;
 
     @Transactional
-    public Tecnico create(TecnicoForm form) {
-        if (repository.existsByCpf(form.getCpf())) {
+    public Tecnico create(TecnicoRequest request) {
+        if (repository.existsByCpf(request.getCpf())) {
             throw new ObjectNotFoundExceptionService("CPF já cadastrado na base de dados!");
         }
-        if (repository.existsByTelefone(form.getTelefone())){
+        if (repository.existsByTelefone(request.getTelefone())) {
             throw new ObjectNotFoundExceptionService("Telefone existe na base de dados!");
         }
-        var obj = new Tecnico(form);
-        return repository.save(new Tecnico(form));
+        var obj = new Tecnico(request);
+        return repository.save(new Tecnico(request));
     }
 
-    public List<Tecnico> findAll(){ return repository.findAll(); }
+    public List<Tecnico> findAll() {
+        return repository.findAll();
+    }
 
-    public List<Tecnico> findByNome(String nome){
+    public Page<Tecnico> findAllByPage(Pageable paginacao) {
+        return repository.findAll(paginacao);
+    }
+
+    public List<Tecnico> findByNome(String nome) {
         List<Tecnico> list = repository.findByNome(nome);
         return list;
     }
 
-    public Page<Tecnico> findByPage(Pageable paginacao) {
-        return repository.findAll(paginacao);
-    }
-
     public Tecnico findById(Integer id) {
         Optional<Tecnico> obj = repository.findById(id);
-        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id ));
-
+        return obj.orElseThrow(() -> new ObjectNotFoundExceptionService("Objeto não encontrado! Id: " + id));
     }
 
     @Transactional
-    public Tecnico update(Integer id, @Valid TecnicoUpForm upForm) {
+    public Tecnico update(Integer id, @Valid TecnicoUpRequest upRequest) {
         var obj = findById(id);
-        obj.atualizarTecnico(upForm);
+        obj.atualizarTecnico(upRequest);
         return repository.save(obj);
     }
 
@@ -73,7 +72,7 @@ public class TecnicoServiceImpl implements TecnicoService{
         repository.deleteById(id);
     }
 
-    private Funcionario findByCPF(TecnicoForm view) {
+    private Funcionario findByCPF(TecnicoRequest view) {
         Funcionario obj = funcionarioRepository.findByCPF(view.getCpf());
         if (obj != null) {
             return obj;

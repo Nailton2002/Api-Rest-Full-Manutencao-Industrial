@@ -5,6 +5,7 @@ import com.manutencao.industrial.domain.dto.os.resquest.OsUpForm;
 import com.manutencao.industrial.domain.dto.os.response.OsListView;
 import com.manutencao.industrial.domain.dto.os.response.OsView;
 import com.manutencao.industrial.domain.service.os.OsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/os")
 public class OsResource {
 
-    @Autowired
-    private OsServiceImpl service;
+    private final OsServiceImpl service;
 
     @Transactional
     @PostMapping

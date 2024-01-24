@@ -1,25 +1,24 @@
 package com.manutencao.industrial.domain.dto.operador.resquest;
 
 import com.manutencao.industrial.domain.entity.operador.Operador;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
+import lombok.NoArgsConstructor;
 
 @Data
-public class OperadorUpForm {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OperadorRequest {
 
     private Integer id;
-    @NotEmpty(message = "O campo NOME é requerido")
     private String nome;
-    @NotEmpty(message = "O campo TELEFONE é requerido")
+    private String cpf;
     private String telefone;
 
-    public OperadorUpForm() { }
-
-    public OperadorUpForm(Operador obj) {
-        super();
+    public OperadorRequest(Operador obj) {
         this.id = obj.getId();
         this.nome = obj.getNome();
+        this.cpf = obj.getCpf();
         this.telefone = obj.getTelefone();
     }
 }

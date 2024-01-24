@@ -1,54 +1,67 @@
 package com.manutencao.industrial.application.resource.operador;
 
-import com.manutencao.industrial.domain.dto.operador.resquest.OperadorForm;
-import com.manutencao.industrial.domain.dto.operador.resquest.OperadorUpForm;
-import com.manutencao.industrial.domain.dto.operador.response.OperadorListView;
-import com.manutencao.industrial.domain.dto.operador.response.OperadorView;
-import com.manutencao.industrial.domain.service.operador.OperadorServiceImpl;
+import com.manutencao.industrial.domain.dto.operador.response.OperadorListResponse;
+import com.manutencao.industrial.domain.dto.operador.response.OperadorResponse;
+import com.manutencao.industrial.domain.dto.operador.resquest.OperadorRequest;
+import com.manutencao.industrial.domain.dto.operador.resquest.OperadorUpRequest;
+import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoResponse;
+import com.manutencao.industrial.domain.service.operador.OperadorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/operadores")
 public class OperadorResource {
 
-    @Autowired
-    private OperadorServiceImpl service;
+    private final OperadorService service;
 
-    @Transactional
     @PostMapping
-    public ResponseEntity salvar(@RequestBody @Valid OperadorForm dados, UriComponentsBuilder uriBuilder){
-        var obj = service.create(dados);
-        var uri = uriBuilder.path("/operadores/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body(new OperadorView(obj));
+    public ResponseEntity create(@RequestBody @Valid OperadorRequest request, UriComponentsBuilder uriBuilder){
+        request = new OperadorRequest(service.create(request));
+        var uri = uriBuilder.path("/operadores/{id}").buildAndExpand(request.getId()).toUri();
+        return ResponseEntity.created(uri).body(new OperadorResponse(request));
     }
 
     @GetMapping
-    public ResponseEntity<List<OperadorListView>> listar(){
-        List<OperadorListView> listViews = service.findAll();
-        return ResponseEntity.ok().body(listViews);
+    public ResponseEntity<List<OperadorListResponse>> findAll(){
+        List<OperadorListResponse> listResponse = service.findAll().stream().map(o -> new OperadorListResponse(o)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listResponse);
     }
 
+    @GetMapping("/porNomes")
+    public ResponseEntity<List<OperadorResponse>> findByNome(@RequestParam(name = "nome") String nome) {
+        List<OperadorResponse> listView = service.findByNome(nome).stream().map(t -> new OperadorResponse(t)).collect(Collectors.toList());;
+        return ResponseEntity.ok().body(listView);
+    }
+
+    @GetMapping("/porPaginas")
+    public ResponseEntity<Page<OperadorResponse>> findAllByPage(@PageableDefault(size = 5, sort = {"nome"}) Pageable paginacao) {
+        var page = service.findAllByPage(paginacao).map(OperadorResponse::new);
+        return ResponseEntity.ok(page);
+    }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OperadorView> findById(@PathVariable Integer id) {
-        var view = service.findById(id);
-        return ResponseEntity.ok().body(new OperadorView(view));
+    public ResponseEntity<OperadorResponse> findById(@PathVariable Integer id) {
+        var response = new OperadorResponse(service.findById(id));
+        return ResponseEntity.ok().body(response);
     }
 
-    @Transactional
     @PutMapping(value = "/{id}")
-    public ResponseEntity<OperadorUpForm> update(@PathVariable Integer id, @Valid @RequestBody OperadorUpForm upForm) {
-        OperadorUpForm newUpForm = new OperadorUpForm(service.update(id, upForm));
-        return ResponseEntity.ok().body(newUpForm);
+    public ResponseEntity<OperadorListResponse> update(@PathVariable Integer id, @Valid @RequestBody OperadorUpRequest upRequest) {
+        upRequest = new OperadorUpRequest(service.update(id, upRequest));
+        return ResponseEntity.ok().body(new OperadorListResponse(upRequest));
     }
 
-    @Transactional
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);

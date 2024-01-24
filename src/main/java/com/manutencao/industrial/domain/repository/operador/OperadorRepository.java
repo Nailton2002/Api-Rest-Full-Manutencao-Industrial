@@ -11,7 +11,7 @@ import java.util.List;
 public interface OperadorRepository extends JpaRepository<Operador, Integer> {
 
     @Query("SELECT o FROM Operador o WHERE LOWER(o.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
-    List<Tecnico> findByNome(String nome);
+    List<Operador> findByNome(String nome);
 
     @Query("SELECT o FROM Operador o WHERE o.cpf =:cpf")
     Tecnico findByCPF(@Param("cpf") String cpf);

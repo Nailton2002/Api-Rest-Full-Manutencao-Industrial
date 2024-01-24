@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TecnicoUpForm {
+public class TecnicoUpRequest {
 
     private Integer id;
     private String nome;
     private String telefone;
 
-    public TecnicoUpForm(Tecnico obj) {
+    public TecnicoUpRequest(Tecnico obj) {
         this.id = obj.getId();
         this.nome = obj.getNome();
         this.telefone = obj.getTelefone();
