@@ -23,10 +23,4 @@ public class TecnicoResponse {
         this.telefone = obj.getTelefone();
     }
 
-    public TecnicoResponse(TecnicoRequest request) {
-        this.id = request.getId();
-        this.nome = request.getNome();
-        this.cpf = request.getCpf();
-        this.telefone = request.getTelefone();
-    }
 }

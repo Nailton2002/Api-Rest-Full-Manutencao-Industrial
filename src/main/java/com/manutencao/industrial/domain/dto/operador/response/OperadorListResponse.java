@@ -21,9 +21,4 @@ public class OperadorListResponse {
         this.telefone = obj.getTelefone();
     }
 
-    public OperadorListResponse(OperadorUpRequest upRequest) {
-        this.id = upRequest.getId();
-        this.nome = upRequest.getNome();
-        this.telefone = upRequest.getTelefone();
-    }
 }

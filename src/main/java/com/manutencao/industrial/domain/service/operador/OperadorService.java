@@ -18,6 +18,9 @@ public interface OperadorService {
     Page<Operador> findAllByPage(Pageable paginacao);
 
     List<Operador> findByNome(String nome);
+
+    List<Operador> findByCPF(String cpf);
+
     Operador findById(Integer id);
 
     Operador update(Integer id, @Valid OperadorUpRequest upRequest);

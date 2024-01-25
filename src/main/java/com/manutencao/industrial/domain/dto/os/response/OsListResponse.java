@@ -1,16 +1,15 @@
 package com.manutencao.industrial.domain.dto.os.response;
 
+import com.manutencao.industrial.domain.dto.os.resquest.OsUpRequest;
 import com.manutencao.industrial.domain.entity.os.OrdemServico;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.manutencao.industrial.domain.enums.Prioridade;
+import com.manutencao.industrial.domain.enums.Status;
+import lombok.*;
 
-import javax.validation.constraints.NotEmpty;
-
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-public class OsListView {
+@AllArgsConstructor
+public class OsListResponse {
 
     private Integer id;
     private Integer status;
@@ -19,7 +18,7 @@ public class OsListView {
     private Integer prioridade;
     private String observacoes;
 
-    public OsListView(OrdemServico obj) {
+    public OsListResponse(OrdemServico obj) {
         this.id = obj.getId();
         this.status = obj.getStatus().getCod();
         this.tecnico = obj.getTecnico().getId();
@@ -28,4 +27,11 @@ public class OsListView {
         this.observacoes = obj.getObservacoes();
     }
 
+    public Prioridade getPrioridade() { return Prioridade.toEnum(this.prioridade); }
+
+    public void setPrioridade(Integer prioridade) { this.prioridade = prioridade; }
+
+    public Status getStatus() { return Status.toEnum(this.status); }
+
+    public void setStatus(Integer status) { this.status = status; }
 }

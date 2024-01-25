@@ -7,6 +7,7 @@ import com.manutencao.industrial.domain.repository.funcionario.FuncionarioReposi
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import com.manutencao.industrial.domain.repository.tecnico.TecnicoRepository;
 import com.manutencao.industrial.infra.validation.ObjectNotFoundExceptionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TecnicoServiceImpl implements TecnicoService {
 
-    @Autowired
-    private TecnicoRepository repository;
+    private final TecnicoRepository repository;
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final FuncionarioRepository funcionarioRepository;
 
     @Transactional
     public Tecnico create(TecnicoRequest request) {
@@ -49,6 +49,11 @@ public class TecnicoServiceImpl implements TecnicoService {
     public List<Tecnico> findByNome(String nome) {
         List<Tecnico> list = repository.findByNome(nome);
         return list;
+    }
+
+    public List<Tecnico> findByCpf(String cpf){
+        List<Tecnico> listByCPF = repository.findByCPF(cpf);
+        return listByCPF;
     }
 
     public Tecnico findById(Integer id) {

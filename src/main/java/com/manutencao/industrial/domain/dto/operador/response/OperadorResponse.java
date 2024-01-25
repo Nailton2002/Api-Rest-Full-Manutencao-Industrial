@@ -2,6 +2,7 @@ package com.manutencao.industrial.domain.dto.operador.response;
 
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorRequest;
 import com.manutencao.industrial.domain.entity.operador.Operador;
+import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,13 +22,6 @@ public class OperadorResponse {
         this.nome = obj.getNome();
         this.cpf = obj.getCpf();
         this.telefone = obj.getTelefone();
-    }
-
-    public OperadorResponse(OperadorRequest request) {
-        id = request.getId();
-        nome = request.getNome();
-        cpf = request.getCpf();
-        telefone = request.getTelefone();
     }
 
 }

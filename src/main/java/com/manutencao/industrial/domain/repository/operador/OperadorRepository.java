@@ -14,7 +14,7 @@ public interface OperadorRepository extends JpaRepository<Operador, Integer> {
     List<Operador> findByNome(String nome);
 
     @Query("SELECT o FROM Operador o WHERE o.cpf =:cpf")
-    Tecnico findByCPF(@Param("cpf") String cpf);
+    List<Operador> findByCPF(String cpf);
 
     boolean existsByTelefone(String fone);
 

@@ -7,6 +7,7 @@ import com.manutencao.industrial.domain.entity.operador.Operador;
 import com.manutencao.industrial.domain.repository.funcionario.FuncionarioRepository;
 import com.manutencao.industrial.domain.repository.operador.OperadorRepository;
 import com.manutencao.industrial.infra.validation.ObjectNotFoundExceptionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OperadorServiceImpl implements OperadorService {
-    @Autowired
-    private OperadorRepository repository;
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+
+    private final OperadorRepository repository;
+
+    private final FuncionarioRepository funcionarioRepository;
 
     @Transactional
     public Operador create(OperadorRequest request) {
@@ -33,7 +35,8 @@ public class OperadorServiceImpl implements OperadorService {
             throw new ObjectNotFoundExceptionService("Telefone existe na base de dados!");
         }
         Operador obj = new Operador(request);
-        return repository.save(new Operador(request));
+        repository.save(obj);
+        return new Operador(request);
     }
 
     public List<Operador> findAll() { return repository.findAll(); }
@@ -43,8 +46,13 @@ public class OperadorServiceImpl implements OperadorService {
     }
 
     public List<Operador> findByNome(String nome) {
-        List<Operador> list = repository.findByNome(nome);
-        return list;
+        List<Operador> listbyNome = repository.findByNome(nome);
+        return listbyNome;
+    }
+
+    public List<Operador> findByCPF(String cpf){
+        List<Operador> listPorCpf = repository.findByCPF(cpf);
+        return listPorCpf;
     }
 
     public Operador findById(Integer id) {
@@ -54,26 +62,23 @@ public class OperadorServiceImpl implements OperadorService {
 
     @Transactional
     public Operador update(Integer id, @Valid OperadorUpRequest upRequest) {
-        var obj = findById(id);
-        obj.atualizarOperador(upRequest);
-        return repository.save(obj);
+        Operador objId = findById(id);
+        objId.atualizarOperador(upRequest);
+        return repository.save(objId);
     }
 
     @Transactional
     public void delete(Integer id) {
+        // Encontrar o objeto Operador pelo seu id
         Operador obj = findById(id);
+        // Verificar se o objeto Operador tem uma lista não vazia
         if (obj.getList().size() > 0) {
+            // Lançar uma exceção se a lista não estiver vazia
             throw new ObjectNotFoundExceptionService("Funcionario possui OS, não pode ser deletado!");
         }
+        // Se a lista estiver vazia, deletar o objeto Operador pelo id
         repository.deleteById(id);
     }
 
-    private Funcionario findByCPF(OperadorRequest request) {
-        Funcionario obj = funcionarioRepository.findByCPF(request.getCpf());
-        if (obj != null) {
-            return obj;
-        }
-        return null;
-    }
 
 }

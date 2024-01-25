@@ -11,9 +11,9 @@ import java.util.List;
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
 
     @Query("SELECT f FROM Funcionario f WHERE LOWER(f.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
-    List<Tecnico> findByNome(String nome);
+    List<Funcionario> findByNome(String nome);
 
     @Query(value = "SELECT f FROM Funcionario f WHERE f.cpf LIKE %?1%")
-    Tecnico findByCPF(@Param("cpf") String cpf);
+    Funcionario findByCPF(String cpf);
 
 }

@@ -1,9 +1,11 @@
 package com.manutencao.industrial.application.resource.tecnico;
 
+import com.manutencao.industrial.domain.dto.operador.response.OperadorResponse;
 import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoListRespose;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoRequest;
 import com.manutencao.industrial.domain.dto.tecnico.resquest.TecnicoUpRequest;
 import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoResponse;
+import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import com.manutencao.industrial.domain.service.tecnico.TecnicoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,39 +30,45 @@ public class TecnicoResource {
 
     @PostMapping
     public ResponseEntity<TecnicoResponse> create(@Valid @RequestBody TecnicoRequest request) {
-        request = new TecnicoRequest(service.create(request));
+        Tecnico obj = service.create(request);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/tecnicos/{id}").buildAndExpand(request.getId()).toUri();
-        return ResponseEntity.created(uri).body(new TecnicoResponse(request));
+        return ResponseEntity.created(uri).body(new TecnicoResponse(obj));
     }
 
     @GetMapping
     public ResponseEntity<List<TecnicoListRespose>> findAll() {
-        List<TecnicoListRespose> listDto = service.findAll().stream().map(t -> new TecnicoListRespose(t)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDto);
+        List<TecnicoListRespose> listResponse = service.findAll().stream().map(t -> new TecnicoListRespose(t)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listResponse);
     }
 
     @GetMapping("/porNomes")
     public ResponseEntity<List<TecnicoResponse>> findByNome(@RequestParam(name = "nome") String nome) {
-        List<TecnicoResponse> listView = service.findByNome(nome).stream().map(t -> new TecnicoResponse(t)).collect(Collectors.toList());;
-        return ResponseEntity.ok().body(listView);
+        List<TecnicoResponse> listResponse = service.findByNome(nome).stream().map(t -> new TecnicoResponse(t)).collect(Collectors.toList());;
+        return ResponseEntity.ok().body(listResponse);
+    }
+
+    @GetMapping("/porCpf")
+    public ResponseEntity<List<TecnicoResponse>> findByCpf(@RequestParam(name = "cpf") String cpf){
+        List<TecnicoResponse> listByCpf = service.findByCpf(cpf).stream().map(t-> new TecnicoResponse(t)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listByCpf);
     }
 
     @GetMapping("/porPaginas")
     public ResponseEntity<Page<TecnicoResponse>> findAllByPage(@PageableDefault(size = 5, sort = {"nome"}) Pageable paginacao) {
-        var page = service.findAllByPage(paginacao).map(TecnicoResponse::new);
-        return ResponseEntity.ok(page);
+        Page<TecnicoResponse> pageResponse = service.findAllByPage(paginacao).map(TecnicoResponse::new);
+        return ResponseEntity.ok(pageResponse);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<TecnicoResponse> findById(@PathVariable Integer id) {
-        TecnicoResponse view = new TecnicoResponse(service.findById(id));
-        return ResponseEntity.ok().body(view);
+        Tecnico objId = service.findById(id);
+        return ResponseEntity.ok().body(new TecnicoResponse(objId));
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<TecnicoListRespose> update(@PathVariable Integer id, @Valid @RequestBody TecnicoUpRequest upRequest) {
-        upRequest = new TecnicoUpRequest(service.update(id, upRequest));
-        return ResponseEntity.ok().body(new TecnicoListRespose(upRequest));
+        Tecnico ïdUpRequest = service.update(id, upRequest);
+        return ResponseEntity.ok().body(new TecnicoListRespose(ïdUpRequest));
     }
 
     @DeleteMapping(value = "/{id}")

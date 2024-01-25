@@ -5,6 +5,7 @@ import com.manutencao.industrial.domain.dto.operador.response.OperadorResponse;
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorRequest;
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorUpRequest;
 import com.manutencao.industrial.domain.dto.tecnico.response.TecnicoResponse;
+import com.manutencao.industrial.domain.entity.operador.Operador;
 import com.manutencao.industrial.domain.service.operador.OperadorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +30,9 @@ public class OperadorResource {
 
     @PostMapping
     public ResponseEntity create(@RequestBody @Valid OperadorRequest request, UriComponentsBuilder uriBuilder){
-        request = new OperadorRequest(service.create(request));
-        var uri = uriBuilder.path("/operadores/{id}").buildAndExpand(request.getId()).toUri();
-        return ResponseEntity.created(uri).body(new OperadorResponse(request));
+        Operador obj = service.create(request);
+        URI uri = uriBuilder.path("/operadores/{id}").buildAndExpand(request.getId()).toUri();
+        return ResponseEntity.created(uri).body(new OperadorResponse(obj));
     }
 
     @GetMapping
@@ -41,25 +43,30 @@ public class OperadorResource {
 
     @GetMapping("/porNomes")
     public ResponseEntity<List<OperadorResponse>> findByNome(@RequestParam(name = "nome") String nome) {
-        List<OperadorResponse> listView = service.findByNome(nome).stream().map(t -> new OperadorResponse(t)).collect(Collectors.toList());;
-        return ResponseEntity.ok().body(listView);
+        List<OperadorResponse> listResponse = service.findByNome(nome).stream().map(o -> new OperadorResponse(o)).collect(Collectors.toList());;
+        return ResponseEntity.ok().body(listResponse);
     }
 
+    @GetMapping("porCpf")
+    public ResponseEntity<List<OperadorResponse>> findByCPF(@RequestParam(name = "cpf") String cpf){
+        List<OperadorResponse> listbyCPF = service.findByCPF(cpf).stream().map(o -> new OperadorResponse(o)).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listbyCPF);
+    }
     @GetMapping("/porPaginas")
     public ResponseEntity<Page<OperadorResponse>> findAllByPage(@PageableDefault(size = 5, sort = {"nome"}) Pageable paginacao) {
-        var page = service.findAllByPage(paginacao).map(OperadorResponse::new);
-        return ResponseEntity.ok(page);
+        Page<OperadorResponse> responsePage = service.findAllByPage(paginacao).map(OperadorResponse::new);
+        return ResponseEntity.ok(responsePage);
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<OperadorResponse> findById(@PathVariable Integer id) {
-        var response = new OperadorResponse(service.findById(id));
-        return ResponseEntity.ok().body(response);
+        Operador objId = service.findById(id);
+        return ResponseEntity.ok().body(new OperadorResponse(objId));
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<OperadorListResponse> update(@PathVariable Integer id, @Valid @RequestBody OperadorUpRequest upRequest) {
-        upRequest = new OperadorUpRequest(service.update(id, upRequest));
-        return ResponseEntity.ok().body(new OperadorListResponse(upRequest));
+        Operador idUpRequest = service.update(id, upRequest);
+        return ResponseEntity.ok().body(new OperadorListResponse(idUpRequest));
     }
 
     @DeleteMapping(value = "/{id}")

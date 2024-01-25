@@ -21,10 +21,5 @@ public class TecnicoListRespose {
         this.telefone = obj.getTelefone();
     }
 
-    public TecnicoListRespose(TecnicoUpRequest request) {
-        this.id = request.getId();
-        this.nome = request.getNome();
-        this.telefone = request.getTelefone();
-    }
 
 }

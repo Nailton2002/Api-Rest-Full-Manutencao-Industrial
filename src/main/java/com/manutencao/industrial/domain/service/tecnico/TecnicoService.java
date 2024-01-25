@@ -17,6 +17,8 @@ public interface TecnicoService {
 
     List<Tecnico> findByNome(String nome);
 
+    List<Tecnico> findByCpf(String cpf);
+
     Page<Tecnico> findAllByPage(Pageable paginacao);
 
     Tecnico findById(Integer id);

@@ -13,7 +13,7 @@ public interface TecnicoRepository extends JpaRepository<Tecnico, Integer> {
     List<Tecnico> findByNome(String nome);
 
     @Query("SELECT t FROM Tecnico t WHERE t.cpf =:cpf")
-    Tecnico findByCPF(@Param("cpf") String cpf);
+    List<Tecnico> findByCPF(String cpf);
 
     boolean existsByTelefone(String fone);
 
