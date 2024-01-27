@@ -1,7 +1,9 @@
 package com.manutencao.industrial.application.resource.os;
 
+import com.manutencao.industrial.domain.dto.os.response.OsFinalizadaResponse;
 import com.manutencao.industrial.domain.dto.os.response.OsListResponse;
 import com.manutencao.industrial.domain.dto.os.response.OsResponse;
+import com.manutencao.industrial.domain.dto.os.resquest.OsFinalizada;
 import com.manutencao.industrial.domain.dto.os.resquest.OsRequest;
 import com.manutencao.industrial.domain.dto.os.resquest.OsUpRequest;
 import com.manutencao.industrial.domain.entity.os.OrdemServico;
@@ -42,21 +44,21 @@ public class OsResource {
         return ResponseEntity.ok().body(new OsResponse(objId));
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<OsListResponse> update(@Valid @RequestBody OsUpRequest upRequest) {
+    @PutMapping("/{id}")
+    public ResponseEntity<OsListResponse> update(@RequestBody OsUpRequest upRequest, @PathVariable Integer id) {
         OrdemServico update = service.update(upRequest);
         return ResponseEntity.ok().body(new OsListResponse(update));
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/finalizar/{id}")
+    public ResponseEntity<OsFinalizadaResponse> finalizarOS(@RequestBody OsFinalizada upRequest, @PathVariable Integer id) {
+        OrdemServico objUpdate = service.finalizarOS(upRequest);
+        return ResponseEntity.ok().body(new OsFinalizadaResponse(objUpdate));
     }
 
-    @DeleteMapping("/finalizando/os/{id}")
-    public ResponseEntity<Void> finalizandoOS(@PathVariable Integer id){
-        service.finalizarOS(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -1,6 +1,8 @@
 package com.manutencao.industrial.domain.entity.os;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.manutencao.industrial.domain.dto.os.resquest.OsFinalizada;
+import com.manutencao.industrial.domain.dto.os.resquest.OsUpRequest;
 import com.manutencao.industrial.domain.entity.operador.Operador;
 import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import com.manutencao.industrial.domain.enums.Prioridade;
@@ -23,7 +25,7 @@ public class OrdemServico {
     @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "operador_id")
     private Operador operador;
     private Integer prioridade;
     private String observacoes;
@@ -32,14 +34,9 @@ public class OrdemServico {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime dataFechamento;
 
-    public String finalizarOS() {
-        if (dataFechamento.isEqual(LocalDateTime.now()) && status.equals(Status.ENCERRADO)) {
-            return "nao pode";
-        } else {
-            dataFechamento = LocalDateTime.now();
-            setStatus(Status.ENCERRADO);
-        }
-        return "OS finalizadas com sucesso";
+    public OrdemServico (OsFinalizada request){
+        this.id = request.getId();
+        this.status = request.getStatus().getCod();
     }
 
     public OrdemServico() {
@@ -52,7 +49,7 @@ public class OrdemServico {
         this.id = id;
         this.status = (status == null) ? 0 : status.getCod();
         this.tecnico = tecnico;
-        this.operador = this.operador;
+        this.operador = operador;
         this.prioridade = (prioridade == null) ? 0 : prioridade.getCod();
         this.observacoes = observacoes;
         this.setDataAbertura(LocalDateTime.now());

@@ -1,5 +1,6 @@
 package com.manutencao.industrial.domain.service.os;
 
+import com.manutencao.industrial.domain.dto.os.resquest.OsFinalizada;
 import com.manutencao.industrial.domain.dto.os.resquest.OsRequest;
 import com.manutencao.industrial.domain.dto.os.resquest.OsUpRequest;
 import com.manutencao.industrial.domain.entity.operador.Operador;
@@ -15,14 +16,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class OsServiceImpl implements OsService{
+public class OsServiceImpl implements OsService {
 
     private final OsRepository repository;
 
@@ -31,26 +31,26 @@ public class OsServiceImpl implements OsService{
     private final OperadorService operadorServiceImpl;
 
     @Transactional
-    public OrdemServico create(@Valid OsRequest request) {
+    public OrdemServico create(OsRequest request) {
         return fromEntityToRequest(request);
     }
 
     @Transactional
-    public OrdemServico update(@Valid OsUpRequest upRequest) {
+    public OrdemServico update(OsUpRequest upRequest) {
         findById(upRequest.getId());
         return fromEntityToUpRequest(upRequest);
+    }
+
+    @Transactional
+    public OrdemServico finalizarOS(OsFinalizada upRequest) {
+        findById(upRequest.getId());
+        return finalizandoOS(upRequest);
     }
 
     @Transactional
     public void delete(Integer id) {
         var obj = findById(id);
         repository.deleteById(id);
-    }
-
-    @Transactional
-    public void finalizarOS(Integer id) {
-        OrdemServico objById = findById(id);
-        objById.finalizarOS();
     }
 
     public OrdemServico findById(Integer id) {
@@ -66,8 +66,8 @@ public class OsServiceImpl implements OsService{
         OrdemServico obj = new OrdemServico();
         obj.setId(request.getId());
         obj.setObservacoes(request.getObservacoes());
-        obj.setPrioridade(Prioridade.toEnum(request.getPrioridade().getCod()));
         obj.setStatus(Status.toEnum(request.getStatus().getCod()));
+        obj.setPrioridade(Prioridade.toEnum(request.getPrioridade().getCod()));
 
         Tecnico tec = tecnicoServiceImpl.findById(request.getTecnico());
         Operador ope = operadorServiceImpl.findById(request.getOperador());
@@ -90,8 +90,22 @@ public class OsServiceImpl implements OsService{
 
         Tecnico tec = tecnicoServiceImpl.findById(upRequest.getTecnico());
         obj.setTecnico(tec);
+        Operador ope = operadorServiceImpl.findById(upRequest.getOperador());
+        obj.setOperador(ope);
+
+        if (obj.getStatus().getCod().equals(2)) {
+            obj.setDataFechamento(LocalDateTime.now());
+        }
         return repository.save(obj);
     }
 
-
+    private OrdemServico finalizandoOS(OsFinalizada dto) {
+        OrdemServico obj = findById(dto.getId());
+        obj.setStatus(Status.toEnum(dto.getStatus().getCod()));
+        if (obj.getStatus().getCod().equals(2)) {
+            obj.setDataFechamento(LocalDateTime.now());
+        }
+        return obj;
+    }
 }
+

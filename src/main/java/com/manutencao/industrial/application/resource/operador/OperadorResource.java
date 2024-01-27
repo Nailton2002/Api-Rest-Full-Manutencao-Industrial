@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -29,9 +30,9 @@ public class OperadorResource {
     private final OperadorService service;
 
     @PostMapping
-    public ResponseEntity create(@RequestBody @Valid OperadorRequest request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity create(@Valid @RequestBody  OperadorRequest request){
         Operador obj = service.create(request);
-        URI uri = uriBuilder.path("/operadores/{id}").buildAndExpand(request.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/tecnicos/{id}").buildAndExpand(request.getId()).toUri();
         return ResponseEntity.created(uri).body(new OperadorResponse(obj));
     }
 

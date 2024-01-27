@@ -25,17 +25,6 @@ public class OsRequest {
     private LocalDateTime dataAbertura;
     private LocalDateTime dataFechamento;
 
-    public OsRequest(OrdemServico obj) {
-        this.id = obj.getId();
-        this.dataAbertura = obj.getDataAbertura();
-        this.dataFechamento = obj.getDataFechamento();
-        this.prioridade = obj.getPrioridade().getCod();
-        this.observacoes = obj.getObservacoes();
-        this.status = obj.getStatus().getCod();
-        this.tecnico = obj.getTecnico().getId();
-        this.operador = obj.getOperador().getId();
-    }
-
     public Prioridade getPrioridade() { return Prioridade.toEnum(this.prioridade); }
 
     public void setPrioridade(Integer prioridade) { this.prioridade = prioridade; }
