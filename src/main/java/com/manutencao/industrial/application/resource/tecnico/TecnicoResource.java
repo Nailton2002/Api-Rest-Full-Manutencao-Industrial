@@ -66,7 +66,7 @@ public class TecnicoResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<TecnicoListRespose> update(@PathVariable Integer id, @Valid @RequestBody TecnicoUpRequest upRequest) {
+    public ResponseEntity<TecnicoListRespose> update(@PathVariable Integer id, @RequestBody TecnicoUpRequest upRequest) {
         Tecnico ïdUpRequest = service.update(id, upRequest);
         return ResponseEntity.ok().body(new TecnicoListRespose(ïdUpRequest));
     }

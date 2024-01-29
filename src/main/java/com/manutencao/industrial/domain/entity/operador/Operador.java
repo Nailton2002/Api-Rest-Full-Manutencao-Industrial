@@ -33,6 +33,9 @@ public class Operador extends Funcionario {
     }
 
     public void atualizarOperador(OperadorUpRequest upRequest){
+        if (upRequest.getId() != null) {
+            this.setId(upRequest.getId());
+        }
         if (upRequest.getNome() != null){
             this.setNome(upRequest.getNome());
         }

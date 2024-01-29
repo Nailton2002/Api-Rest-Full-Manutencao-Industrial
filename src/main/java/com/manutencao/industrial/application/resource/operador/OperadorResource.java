@@ -30,9 +30,9 @@ public class OperadorResource {
     private final OperadorService service;
 
     @PostMapping
-    public ResponseEntity create(@Valid @RequestBody  OperadorRequest request){
+    public ResponseEntity<OperadorResponse> create(@Valid @RequestBody  OperadorRequest request){
         Operador obj = service.create(request);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/tecnicos/{id}").buildAndExpand(request.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/operadoes/{id}").buildAndExpand(request.getId()).toUri();
         return ResponseEntity.created(uri).body(new OperadorResponse(obj));
     }
 

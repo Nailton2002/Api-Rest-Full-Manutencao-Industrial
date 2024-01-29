@@ -1,6 +1,8 @@
 package com.manutencao.industrial.domain.dto.os.resquest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.manutencao.industrial.domain.entity.operador.Operador;
+import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import com.manutencao.industrial.domain.enums.Prioridade;
 import com.manutencao.industrial.domain.enums.Status;
 import com.manutencao.industrial.domain.entity.os.OrdemServico;

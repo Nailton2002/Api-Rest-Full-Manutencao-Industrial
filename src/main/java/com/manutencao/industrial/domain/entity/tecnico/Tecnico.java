@@ -20,21 +20,25 @@ import java.util.List;
 @Table(name = "tb_recnico")
 public class Tecnico extends Funcionario {
 
-    @JsonIgnore @OneToMany(mappedBy = "tecnico")
+    @JsonIgnore
+    @OneToMany(mappedBy = "tecnico")
     private List<OrdemServico> list = new ArrayList<>();
 
-    public Tecnico(TecnicoRequest request){
+    public Tecnico(TecnicoRequest request) {
         this.setId(request.getId());
         this.setNome(request.getNome());
         this.setCpf(request.getCpf());
         this.setTelefone(request.getTelefone());
     }
 
-    public void atualizarTecnico(TecnicoUpRequest upRequest){
-        if (upRequest.getNome() != null){
+    public void atualizarTecnico(TecnicoUpRequest upRequest) {
+        if (upRequest.getId() != null) {
+            this.setId(upRequest.getId());
+        }
+        if (upRequest.getNome() != null) {
             this.setNome(upRequest.getNome());
         }
-        if (upRequest.getNome() != null){
+        if (upRequest.getNome() != null) {
             this.setTelefone(upRequest.getTelefone());
         }
     }

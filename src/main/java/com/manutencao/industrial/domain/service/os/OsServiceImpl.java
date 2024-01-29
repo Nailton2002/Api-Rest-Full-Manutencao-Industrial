@@ -12,6 +12,7 @@ import com.manutencao.industrial.domain.repository.os.OsRepository;
 import com.manutencao.industrial.domain.service.operador.OperadorService;
 import com.manutencao.industrial.domain.service.tecnico.TecnicoService;
 import com.manutencao.industrial.infra.validation.ObjectNotFoundExceptionService;
+import com.manutencao.industrial.infra.validation.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +36,25 @@ public class OsServiceImpl implements OsService {
         return fromEntityToRequest(request);
     }
 
+    public OrdemServico update(Integer id, OsUpRequest upRequest) {
+        // Verificar se a ordem de serviço existe no banco de dados
+        OrdemServico ordemServico = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ordem de Serviço não encontrada para o ID: " + id));
+
+        // Atualizar os campos da ordem de serviço com base no DTO
+        ordemServico.atualizarTecnico(upRequest);
+
+        // Salvar a ordem de serviço atualizada no banco de dados
+        repository.save(ordemServico);
+        return ordemServico;
+    }
+
     @Transactional
     public OrdemServico update(OsUpRequest upRequest) {
-        findById(upRequest.getId());
+        OrdemServico obj = findById(upRequest.getId());
+        boolean finalizada = obj.getStatus().getCod().equals(2);
+        if (finalizada) {
+            throw new ObjectNotFoundExceptionService("Esta OS foi finalizada, não pode ser atualizada!");
+        }
         return fromEntityToUpRequest(upRequest);
     }
 
@@ -49,7 +66,11 @@ public class OsServiceImpl implements OsService {
 
     @Transactional
     public void delete(Integer id) {
-        var obj = findById(id);
+        OrdemServico obj = findById(id);
+        boolean finalizada = obj.getStatus().getCod().equals(2);
+        if (finalizada) {
+            throw new ObjectNotFoundExceptionService("Esta OS foi finalizada, não pode ser excluida!");
+        }
         repository.deleteById(id);
     }
 
@@ -92,6 +113,8 @@ public class OsServiceImpl implements OsService {
         obj.setTecnico(tec);
         Operador ope = operadorServiceImpl.findById(upRequest.getOperador());
         obj.setOperador(ope);
+
+        obj.atualizarTecnico(upRequest);
 
         if (obj.getStatus().getCod().equals(2)) {
             obj.setDataFechamento(LocalDateTime.now());

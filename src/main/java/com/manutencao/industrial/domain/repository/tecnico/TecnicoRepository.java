@@ -9,8 +9,11 @@ import java.util.List;
 
 public interface TecnicoRepository extends JpaRepository<Tecnico, Integer> {
 
-    @Query("SELECT t FROM Tecnico t WHERE LOWER(t.nome) LIKE LOWER(CONCAT('%', :nome, '%'))")
-    List<Tecnico> findByNome(String nome);
+    @Query("SELECT t FROM Tecnico t WHERE UPPER(t.nome) LIKE UPPER(CONCAT('%', :nome, '%'))")
+    List<Tecnico> findByNome(@Param("nome") String nome);
+
+    @Query("SELECT p FROM Tecnico p WHERE LOWER(p.nome) LIKE LOWER(:nome)")
+    List<Tecnico> buscarPorNome(@Param("nome") String nome);
 
     @Query("SELECT t FROM Tecnico t WHERE t.cpf =:cpf")
     List<Tecnico> findByCPF(String cpf);

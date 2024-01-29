@@ -2,19 +2,19 @@ package com.manutencao.industrial.domain.service.operador;
 
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorRequest;
 import com.manutencao.industrial.domain.dto.operador.resquest.OperadorUpRequest;
-import com.manutencao.industrial.domain.entity.funcionario.Funcionario;
 import com.manutencao.industrial.domain.entity.operador.Operador;
 import com.manutencao.industrial.domain.repository.funcionario.FuncionarioRepository;
 import com.manutencao.industrial.domain.repository.operador.OperadorRepository;
 import com.manutencao.industrial.infra.validation.ObjectNotFoundExceptionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +39,9 @@ public class OperadorServiceImpl implements OperadorService {
         return new Operador(request);
     }
 
-    public List<Operador> findAll() { return repository.findAll(); }
+    public List<Operador> findAll() {
+        return repository.findAll();
+    }
 
     public Page<Operador> findAllByPage(Pageable paginacao) {
         return repository.findAll(paginacao);
@@ -50,7 +52,7 @@ public class OperadorServiceImpl implements OperadorService {
         return listbyNome;
     }
 
-    public List<Operador> findByCPF(String cpf){
+    public List<Operador> findByCPF(String cpf) {
         List<Operador> listPorCpf = repository.findByCPF(cpf);
         return listPorCpf;
     }
@@ -79,6 +81,5 @@ public class OperadorServiceImpl implements OperadorService {
         // Se a lista estiver vazia, deletar o objeto Operador pelo id
         repository.deleteById(id);
     }
-
 
 }

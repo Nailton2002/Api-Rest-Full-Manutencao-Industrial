@@ -46,7 +46,7 @@ public class OsResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<OsListResponse> update(@RequestBody OsUpRequest upRequest, @PathVariable Integer id) {
-        OrdemServico update = service.update(upRequest);
+        OrdemServico update = service.update(id, upRequest);
         return ResponseEntity.ok().body(new OsListResponse(update));
     }
 

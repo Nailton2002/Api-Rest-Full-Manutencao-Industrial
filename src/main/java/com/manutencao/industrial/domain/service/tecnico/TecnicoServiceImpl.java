@@ -63,9 +63,10 @@ public class TecnicoServiceImpl implements TecnicoService {
 
     @Transactional
     public Tecnico update(Integer id, @Valid TecnicoUpRequest upRequest) {
-        var obj = findById(id);
-        obj.atualizarTecnico(upRequest);
-        return repository.save(obj);
+        Tecnico tecnico = new Tecnico();
+        tecnico = findById(id);
+        tecnico.atualizarTecnico(upRequest);
+        return repository.save(tecnico);
     }
 
     @Transactional

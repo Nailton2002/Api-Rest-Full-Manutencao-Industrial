@@ -11,7 +11,9 @@ public interface OsService {
 
     OrdemServico create(OsRequest request);
 
-    OrdemServico update(OsUpRequest upRequest);
+//    OrdemServico update(OsUpRequest upRequest);
+
+    OrdemServico update(Integer id, OsUpRequest upRequest);
 
     void delete(Integer id);
 

@@ -4,6 +4,9 @@ import com.manutencao.industrial.domain.entity.tecnico.Tecnico;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
+
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
@@ -11,8 +14,11 @@ import lombok.NoArgsConstructor;
 public class TecnicoRequest {
 
     private Integer id;
+    @NotEmpty(message = "O campo nome é obrigatório")
     private String nome;
+    @CPF @NotEmpty(message = "O campo CPF é obrigatório")
     private String cpf;
+    @NotEmpty(message = "O campo telefone é obrigatório")
     private String telefone;
 
     public TecnicoRequest(Tecnico obj) {
